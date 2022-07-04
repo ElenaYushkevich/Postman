@@ -1,0 +1,163 @@
+{
+	"info": {
+		"_postman_id": "ae9b7108-7f7c-4f38-8224-8d725c04de69",
+		"name": "HW_2_csv",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user_info_2_csv",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// 1****. Преобразовать задание 1 таким образом, чтобы вы отправляли параметры через CSV файл. У вас будет ровно 1 запрос в коллекции, который будет повторяться столько раз, сколько строк в CSV файле. Также должна быть написана функция в тестах, которая проверяет валидность входящих данных, и в зависимости от этого проверяет на статус 200 или НЕ 200.\r",
+							"let req = request.data\r",
+							"let name = req.name;\r",
+							"let age = req.age;\r",
+							"let salary = req.salary;\r",
+							"\r",
+							"const checkName = function(value) {\r",
+							"    if (value && (3 <= +value.length) && (+value.length <= 40) && (value.trim() === value)) \r",
+							"        return true \r",
+							"        else return false   \r",
+							"}\r",
+							"const checkAge = function(value) {\r",
+							"    if (value && (value >= 18) && (value <= 120) && (Number.isInteger(Number(value))))\r",
+							"        return true \r",
+							"        else return false   \r",
+							"}\r",
+							"const checkSalary = function(value) {\r",
+							"    if (value && (value >= 1) && (value <= 1000000) && (Number.isInteger(Number(value))))\r",
+							"        return true \r",
+							"        else return false   \r",
+							"}\r",
+							"\r",
+							"const checkValid = function() {\r",
+							"    if (checkName(name) && checkAge(age) && checkSalary(salary))\r",
+							"        return true\r",
+							"        else false   \r",
+							"}\r",
+							"\r",
+							"const checkNotValid = function() {\r",
+							"if (!req.name) {\r",
+							"        pm.test(\"Empty field name\", function () {\r",
+							"           pm.response.to.not.have.status(200);\r",
+							"        });\r",
+							"    }\r",
+							"    if (!req.age) {\r",
+							"        pm.test(\"Empty field age\", function () {\r",
+							"           pm.response.to.not.have.status(200);\r",
+							"        });\r",
+							"    }\r",
+							"    if (!req.salary) {\r",
+							"        pm.test(\"Empty field salary\", function () {\r",
+							"           pm.response.to.not.have.status(200);\r",
+							"        });\r",
+							"    }\r",
+							"    if (req.name.length < 3 && req.name.length > 0) {\r",
+							"        pm.test(\"Length name < 3\", function () {\r",
+							"           pm.response.to.not.have.status(200);\r",
+							"        });\r",
+							"    }\r",
+							"    if (req.name.length > 40) {\r",
+							"        pm.test(\"Length name > 40\", function () {\r",
+							"           pm.response.to.not.have.status(200);\r",
+							"        });\r",
+							"    }\r",
+							"    if (req.name.trim() !== req.name) {\r",
+							"        pm.test(\"There are spaces\", function () {\r",
+							"           pm.response.to.not.have.status(200);\r",
+							"        });\r",
+							"    }\r",
+							"    if (req.age < 18) {\r",
+							"        pm.test(\"Age < 18\", function () {\r",
+							"           pm.response.to.not.have.status(200);\r",
+							"        });\r",
+							"    }\r",
+							"    if (req.age > 120) {\r",
+							"        pm.test(\"Age > 120\", function () {\r",
+							"           pm.response.to.not.have.status(200);\r",
+							"        });\r",
+							"    }\r",
+							"    if (req.salary < 1) {\r",
+							"        pm.test(\"Salary < 1\", function () {\r",
+							"           pm.response.to.not.have.status(200);\r",
+							"        });\r",
+							"    }\r",
+							"    if (req.salary > 1000000) {\r",
+							"        pm.test(\"Salary > 1000000\", function () {\r",
+							"           pm.response.to.not.have.status(200);\r",
+							"        });\r",
+							"    }\r",
+							"    if (!Number.isInteger(Number(req.salary))) {\r",
+							"        pm.test(\"Salary is Not integer\", function () {\r",
+							"           pm.response.to.not.have.status(200);\r",
+							"        });\r",
+							"    }\r",
+							"    if (!Number.isInteger(Number(req.age))) {\r",
+							"        pm.test(\"Age is Not integer\", function () {\r",
+							"           pm.response.to.not.have.status(200);\r",
+							"        });\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"if (checkValid()) {\r",
+							"    pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"    });\r",
+							"} \r",
+							"else checkNotValid() "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "{{name}}",
+							"type": "default"
+						},
+						{
+							"key": "age",
+							"value": "{{age}}",
+							"type": "default"
+						},
+						{
+							"key": "salary",
+							"value": "{{salary}}",
+							"type": "default"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://162.55.220.72:5005/user_info_2",
+					"protocol": "http",
+					"host": [
+						"162",
+						"55",
+						"220",
+						"72"
+					],
+					"port": "5005",
+					"path": [
+						"user_info_2"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
